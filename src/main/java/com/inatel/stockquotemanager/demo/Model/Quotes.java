@@ -1,5 +1,7 @@
 package com.inatel.stockquotemanager.demo.Model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +14,7 @@ public class Quotes {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	private String data;
+	private LocalDate data;
 	private Double valor;
 	@ManyToOne
 	private Stock stock;
@@ -21,7 +23,7 @@ public class Quotes {
 	public Quotes() {
 }
 
-	public Quotes(Stock stock2, String data2, Double valor2) {
+	public Quotes(LocalDate data2, Double valor2,Stock stock2) {
          this.data = data2;
          this.valor = valor2;
          this.stock = stock2;
@@ -45,11 +47,11 @@ public class Quotes {
 		this.id = id;
 	}
 
-	public String getData() {
+	public LocalDate getData() {
 		return data;
 	}
 
-	public void setData(String data) {
+	public void setData(LocalDate data) {
 		this.data = data;
 	}
 
