@@ -7,7 +7,8 @@ public class IdStockDto {
 	public String getId() {
 		return id;
 	}
-	
+
+		
 	
 
 }

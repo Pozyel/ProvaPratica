@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -27,6 +26,9 @@ import com.inatel.stockquotemanager.demo.Model.Quotes;
 import com.inatel.stockquotemanager.demo.Repository.QuoteRepository;
 import com.inatel.stockquotemanager.demo.Repository.StockRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping(path = "/stockquotes")
 public class StockQuoteController {
@@ -39,14 +41,14 @@ public class StockQuoteController {
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<StockQuoteDto> cadastrar(@RequestBody @Valid StockQuoteForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<StockQuoteDto> cadastrar(@RequestBody @Valid StockQuoteForm form,
+			UriComponentsBuilder uriBuilder) {
 		List<Quotes> quote = form.ConverteMapa(stockRepository);
 		String id = form.getId();
 		String stockApi = StockService.get(id);
-		
-
+         System.out.println(stockApi);
 		if (stockApi != null) {
-
+			log.debug("Registering a Stock Quote");
 			quoteRepository.saveAll(quote);
 			URI uri = uriBuilder.path("/stockquotes/{id}").buildAndExpand(id).toUri();
 			return ResponseEntity.created(uri).build();
@@ -61,25 +63,27 @@ public class StockQuoteController {
 		List<IdStockDto> stocks = Arrays.asList(StockService.getAll());
 		List<StockQuoteDto> stockQuoteDto = new ArrayList<StockQuoteDto>();
 
+		System.out.println(stocks);
+		log.debug("List all the Stock Quote");
 		stocks.forEach(stock -> {
+
 			List<Quotes> quotes = quoteRepository.findByStockId(stock.getId());
-			System.out.println("teste"+quotes);
 			stockQuoteDto.add(new StockQuoteDto(stock.getId(), quotes));
 		});
 		return stockQuoteDto;
 
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<StockQuoteDto> ListarUm(@PathVariable String id){
+	public ResponseEntity<StockQuoteDto> ListarUm(@PathVariable String id) {
 		List<Quotes> quotes = quoteRepository.findByStockId(id);
-		
-		if(!quotes.isEmpty()) {
-			return ResponseEntity.ok(new StockQuoteDto(id,quotes));
+
+		if (!quotes.isEmpty()) {
+			log.debug("List one Stock Quote");
+			return ResponseEntity.ok(new StockQuoteDto(id, quotes));
 		}
-		
-		
+
 		return ResponseEntity.notFound().build();
-		
+
 	}
 }

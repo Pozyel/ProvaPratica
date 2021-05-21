@@ -50,9 +50,9 @@ public class StockQuoteForm {
 			return quoteLista;
 
 		}
-		for (String key : quotes.keySet()) {
+		for (Map.Entry<String, String> quotes : this.quotes.entrySet()) {
 
-			Quotes quote = new Quotes( LocalDate.parse(key), Double.parseDouble(key),stock.get());
+			Quotes quote = new Quotes( LocalDate.parse(quotes.getKey()), Double.parseDouble(quotes.getValue()),stock.get());
 			quoteLista.add(quote);
 
 			

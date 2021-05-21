@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/cache")
 public class CacheController {
@@ -24,6 +27,7 @@ public class CacheController {
 	@Caching(evict = { @CacheEvict(value = "stock",allEntries=true),
 			 @CacheEvict(value = "stocklista", allEntries = true)})
 	public ResponseEntity<?> cleanCache(){
+		log.debug("Cleaning the cache");
 		return ResponseEntity.status(204).build();
 		
 	}
